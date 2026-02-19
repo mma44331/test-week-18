@@ -1,11 +1,13 @@
 import json
+import os
+
 from priority_logic import determining_urgency
 from redis_connection import get_redis_conn
 from dotenv import load_dotenv
 
 load_dotenv()
-
-with open('../data/border_alerts.json', 'r', encoding='utf-8') as f:
+file_path = os.getenv('DATA_FILE_PATH', '../data/border_alerts.json')
+with open(file_path, 'r', encoding='utf-8') as f:
     data = json.load(f)
 
 r = get_redis_conn()
