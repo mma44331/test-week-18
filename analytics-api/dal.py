@@ -6,7 +6,7 @@ from mongo_connection import get_mongo_conn
 
 
 r = get_redis_conn()
-
+conn = get_mongo_conn()
 
 def get_alerts_by_border_and_priority():
     cache_key = "analytics:alerts_by_border"
@@ -36,22 +36,11 @@ def get_alerts_by_border_and_priority():
         }
     ]
 
-    results = list(collection.aggregate(pipeline))
+    results = list(conn.aggregate(pipeline))
 
     r.set(cache_key, json.dumps(results), ex=600)
 
-    print("Returning data from MongoDB and caching it")
     return results
-
-def get_alerts_by_border_and_priority():
-    cache_key = "analytics:alerts_by_border"
-    cached_data = r.get(cache_key)
-
-    if cached_data:
-        return json.loads(cached_data)
-
-
-    r.set(cache_key, json.dumps(data, default=str), ex=300)
 
 
 
